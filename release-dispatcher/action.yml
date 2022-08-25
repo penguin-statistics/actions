@@ -1,0 +1,57 @@
+name: 'Release Dispatcher'
+description: 'The release dispatcher dispatches the release of a release to the desired destinations. This action is currently only intended to be used on production/stable releases. This action by default is a no-op, and you have to enable desired destinations by setting the corresponding inputs to true.'
+
+inputs:
+  version:
+    description: 'The version to release with. Example: v1.2.3. Recommended using outputs.semver from penguin-statistics/actions/git-meta'
+    required: true
+  
+  use-sentry:
+    description: 'Whether to create a release on Sentry. This requires you to have repository-level secrets SENTRY_ORG and SENTRY_PROJECT set.'
+    required: false
+    default: 'false'
+  
+  use-ghrelease:
+    description: 'Whether to create a release on GitHub.'
+    required: false
+    default: 'false'
+  
+  use-manifestbot:
+    description: 'Whether to update the manifests repository.'
+    required: false
+    default: 'false'
+
+  manifestbot-file-path:
+    description: 'The path to values-override.yaml relative to the manifest repository.'
+    required: false
+
+
+runs:
+  using: composite
+  steps:
+    - name: "Sentry: Create Release"
+      if: ${{ inputs.use-sentry == 'true' }}
+      uses: getsentry/action-release@v1
+      env:
+        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+        SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+      with:
+        environment: prod
+        version: ${{ inputs.version }}
+
+    - name: "GitHub: Create Repository Release"
+      if: ${{ inputs.use-ghrelease == 'true' }}
+      uses: "marvinpinto/action-automatic-releases@v1.2.1"
+      with:
+        repo_token: "${{ github.token }}"
+        prerelease: false
+    
+    - name: "ManifestBot: Update Manifest"
+      if: ${{ inputs.use-manifestbot == 'true' }}
+      uses: "penguin-statistics/manifestbot@v9"
+      with:
+        file-path: ${{ inputs.manifestbot-file-path }}
+        version-path: 'image.tag'
+        version: ${{ inputs.version }}
+        token: ${{ secrets.PAT_FOR_MANIFESTBOT }}
