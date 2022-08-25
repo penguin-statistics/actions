@@ -3,15 +3,15 @@ description: 'This action extracts metadata from git context. It can be used to 
 
 outputs:
   minisha:
-    description: 'The first 7 chars of the commit sha.'
+    description: 'The first 7 chars of the commit sha. Example: 8b9d3f1'
     value: ${{ steps.git-meta.outputs.minisha }}
   
   semver:
-    description: 'The semver tag of the commit, if any.'
+    description: 'The semver from tag. Example: v1.2.3'
     value: ${{ steps.git-meta.outputs.semver }}
   
   version:
-    description: 'The version of the commit, if any.'
+    description: 'The version of the commit, if any. Example: v1.2.3+8b9d3f1'
     value: ${{ steps.git-meta.outputs.version }}
 
 runs:
