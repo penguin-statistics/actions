@@ -9,6 +9,11 @@ inputs:
   repository:
     description: 'The repository to push to, in format {user}/{repo}. Example: penguin-statistics/backend-next'
     required: true
+  
+  push:
+    description: 'Whether to push the image to the registry. If false, the image will be built but not pushed.'
+    required: false
+    default: 'true'
 
 runs:
   using: composite
@@ -38,7 +43,7 @@ runs:
     - name: "Docker: Build and Push Image"
       uses: docker/build-push-action@v3
       with:
-        push: true
+        push: ${{ inputs.push }}
         tags: ${{ steps.dockermeta.outputs.tags }}
         labels: ${{ steps.dockermeta.outputs.labels }}
         cache-from: type=registry,ref=ghcr.io/${{ inputs.repository }}:buildcache
