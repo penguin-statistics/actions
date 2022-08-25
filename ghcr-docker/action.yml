@@ -3,7 +3,7 @@ description: 'This action will build and push a Docker image to GitHub Container
 
 inputs:
   version:
-    description: 'The version to tag with. Example: v1.2.3. Recommended using outputs.semver from penguin-statistics/actions/git-meta@v1'
+    description: 'The version to tag with. Example: v1.2.3. Recommended using outputs.semver from penguin-statistics/actions/git-meta'
     required: true
   
   repository:

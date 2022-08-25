@@ -5,7 +5,6 @@ inputs:
   file-path:
     description: 'The path to values-override.yaml relative to the manifest repository.'
     required: true
-    default: 'applications/backend/values-prod.yaml'
 
   version-path:
     description: 'The path to the version field in values-override.yaml.'
