@@ -31,7 +31,7 @@ runs:
     - name: 'ManifestBot: Use yq to update manifests'
       shell: bash
       run: |
-        sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq;
+        sudo wget -q https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq;
         sudo chmod +x /usr/bin/yq;
         yq eval -i ".${{ inputs.version-path }} = \"${{ inputs.version }}\"" "${{ inputs.file-path }}"
     
