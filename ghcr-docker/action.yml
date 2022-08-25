@@ -9,7 +9,7 @@ inputs:
   repository:
     description: 'The repository to push to, in format {user}/{repo}. Example: penguin-statistics/backend-next'
     required: true
-  
+
 runs:
   using: composite
   steps:
