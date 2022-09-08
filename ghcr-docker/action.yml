@@ -51,8 +51,6 @@ runs:
         push: ${{ inputs.push }}
         tags: ${{ steps.dockermeta.outputs.tags }}
         labels: ${{ steps.dockermeta.outputs.labels }}
-        cache-from: type=registry,ref=ghcr.io/${{ inputs.repository }}:buildcache
-        cache-to: type=registry,ref=ghcr.io/${{ inputs.repository }}:buildcache,mode=max
         build-args: |
           VERSION=${{ inputs.version }}
           ${{ inputs.build-args }}
