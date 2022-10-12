@@ -15,6 +15,11 @@ inputs:
     required: false
     default: 'true'
   
+  load:
+    description: 'Whether to load the image into the local Docker daemon. If false, the image will be built but not loaded.'
+    required: false
+    default: 'false'
+  
   build-args:
     description: 'Build arguments to pass to the Docker build command. One argument per line. Example (\n here is just to demonstrate the new line): ARG1=VALUE1 \n ARG2=VALUE2'
     required: false
@@ -49,6 +54,7 @@ runs:
       uses: docker/build-push-action@v3
       with:
         push: ${{ inputs.push }}
+        load: ${{ inputs.load }}
         tags: ${{ steps.dockermeta.outputs.tags }}
         labels: ${{ steps.dockermeta.outputs.labels }}
         build-args: |
