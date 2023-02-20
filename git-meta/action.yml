@@ -23,6 +23,6 @@ runs:
       run: |
         export TRUNCATED_GITHUB_SHA=$(echo ${{ github.sha }} | cut -c1-7);
         export VERSION=${GITHUB_REF/refs\/tags\//};
-        echo "mini-sha=${TRUNCATED_GITHUB_SHA}" >> $GITHUB_OUTPUT;
-        echo "version=${VERSION}" >> $GITHUB_OUTPUT;
-        echo "version-label=${VERSION}+${TRUNCATED_GITHUB_SHA}" >> $GITHUB_OUTPUT;
+        echo "mini-sha=$TRUNCATED_GITHUB_SHA" >> $GITHUB_OUTPUT;
+        echo "version=$VERSION" >> $GITHUB_OUTPUT;
+        echo "version-label=$VERSION+$TRUNCATED_GITHUB_SHA" >> $GITHUB_OUTPUT;
