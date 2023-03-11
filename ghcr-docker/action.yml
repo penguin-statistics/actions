@@ -51,7 +51,7 @@ runs:
           latest=auto
     
     - name: "Docker: Build and Push Image"
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v4
       with:
         push: ${{ inputs.push }}
         load: ${{ inputs.load }}
