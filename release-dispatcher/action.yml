@@ -57,6 +57,7 @@ runs:
       with:
         environment: prod
         version: ${{ inputs.version }}
+        ignore_empty: true
 
     - name: "GitHub: Create Repository Release"
       if: ${{ inputs.use-ghrelease == 'true' }}
