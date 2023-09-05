@@ -23,7 +23,7 @@ runs:
   using: 'composite'
   steps:
     - name: 'ManifestBot: Checkout manifests'
-      uses: 'actions/checkout@v3'
+      uses: 'actions/checkout@v4'
       with:
         repository: 'penguin-statistics/manifests'
         token: ${{ inputs.token }}
