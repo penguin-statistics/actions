@@ -59,13 +59,6 @@ runs:
         version: ${{ inputs.version }}
         ignore_empty: true
 
-    - name: "GitHub: Create Repository Release"
-      if: ${{ inputs.use-ghrelease == 'true' }}
-      uses: "marvinpinto/action-automatic-releases@v1.2.1"
-      with:
-        repo_token: "${{ github.token }}"
-        prerelease: false
-    
     - name: "ManifestBot: Update Manifest"
       if: ${{ inputs.use-manifestbot == 'true' }}
       uses: "penguin-statistics/manifestbot@v9"
@@ -74,3 +67,21 @@ runs:
         version-path: 'image.tag'
         version: ${{ inputs.version }}
         token: ${{ inputs.manifestbot-token }}
+
+    # last, and never failing the job: the release notes must not hold back the deployment above. It used
+    # marvinpinto/action-automatic-releases, which is archived and crashed under the Node 24 runtime while building
+    # its changelog (backend-next v3.14.55, v3.14.57), skipping ManifestBot
+    - name: "GitHub: Create Repository Release"
+      if: ${{ inputs.use-ghrelease == 'true' }}
+      continue-on-error: true
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        GH_REPO: ${{ github.repository }}
+        TAG: ${{ github.ref_name }}
+      run: |
+        if gh release view "$TAG" >/dev/null 2>&1; then
+          echo "Release $TAG exists already"
+        else
+          gh release create "$TAG" --verify-tag --title "$TAG" --generate-notes
+        fi
