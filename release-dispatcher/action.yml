@@ -36,8 +36,12 @@ inputs:
     required: false
     default: 'false'
 
+  manifestbot-env-key:
+    description: 'The key of the KEY=value line in hosts/penguin-box/.env of the manifest repository to set to the version, e.g. BACKEND_TAG. If use-manifestbot is true, set this, manifestbot-file-path, or both.'
+    required: false
+
   manifestbot-file-path:
-    description: 'The path to values-override.yaml relative to the manifest repository.'
+    description: 'Optional. The path to a values YAML file relative to the manifest repository whose image.tag is set to the version (the k8s applications/*/values-prod.yaml).'
     required: false
   
   manifestbot-token:
@@ -61,8 +65,9 @@ runs:
 
     - name: "ManifestBot: Update Manifest"
       if: ${{ inputs.use-manifestbot == 'true' }}
-      uses: "penguin-statistics/manifestbot@v9"
+      uses: "penguin-statistics/manifestbot@v10"
       with:
+        env-key: ${{ inputs.manifestbot-env-key }}
         file-path: ${{ inputs.manifestbot-file-path }}
         version-path: 'image.tag'
         version: ${{ inputs.version }}
